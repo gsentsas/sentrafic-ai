@@ -1,0 +1,243 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Virtual environments
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.sublime-project
+.sublime-workspace
+*.code-workspace
+.project
+.pydevproject
+.settings/
+*.iml
+*.ipr
+*.iws
+
+# Node.js / NPM
+node_modules/
+npm-debug.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+lerna-debug.log
+.pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+.nextjs/
+.next/cache/
+.next/production/
+.turbo/
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+.nyc_output
+coverage
+.jest-coverage
+
+# Build outputs
+build/
+dist/
+*.bundle.js
+*.min.js
+*.min.css
+
+# Logs
+logs/
+*.log
+lerna-debug.log*
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+.docker/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+postgres_data/
+redis_data/
+
+# Media and sample files
+samples/videos/*.mp4
+samples/videos/*.avi
+samples/images/*.jpg
+samples/images/*.png
+*.h264
+*.h265
+
+# Machine Learning models
+*.pt
+*.pth
+weights/
+models/
+yolov8n.pt
+yolov8s.pt
+yolov8m.pt
+yolov8l.pt
+yolov8x.pt
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+*.bak
+*.swp
+*.orig
+
+# OS specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Configuration
+.env.test
+.env.testing
+.env.development
+.env.staging
+
+# Credentials and secrets
+*.pem
+*.key
+*.crt
+*.pfx
+*.jks
+secrets/
+credentials/
+
+# macOS
+.AppleDouble
+.LSOverride
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+.Trash-*
+.nfs*
+
+# Windows
+$RECYCLE.BIN/
+ehthumbs.db
+Thumbs.db
+
+# CI/CD
+.github/workflows/.env
+.gitlab-ci.env
+
+# VS Code
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# Backup files
+*.backup
+*.bak
+.backup/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# System files
+.directory
+.vagrant/
+Vagrantfile
+
+# Development databases
+*.sqlite
+*.sqlite3
+db.sqlite3
+
+# Static and media directories to exclude
+/static/
+/media/
+/uploads/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+
+# Alembic migrations
+alembic/versions/__pycache__/
+
+# Production
+!.gitkeep

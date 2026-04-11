@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f9fafb;
+  color: #1f2937;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .input-base {
+    @apply px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all bg-white text-gray-900;
+  }
+
+  .button-base {
+    @apply inline-flex items-center justify-center font-medium rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+  }
+
+  .card-base {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-gray-900 mb-6;
+  }
+
+  .subsection-title {
+    @apply text-lg font-semibold text-gray-900 mb-4;
+  }
+
+  .text-muted {
+    @apply text-gray-600;
+  }
+
+  .badge-base {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+}
+
+/* Recharts custom styles */
+.recharts-default-tooltip {
+  @apply !bg-white !border !border-gray-200 !rounded-lg !shadow-lg;
+}
+
+.recharts-tooltip-label {
+  @apply !text-gray-900 !font-semibold;
+}
+
+.recharts-tooltip-item {
+  @apply !text-gray-700;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Animation utilities */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    to right,
+    #f1f5f9 0%,
+    #e2e8f0 50%,
+    #f1f5f9 100%
+  );
+  background-size: 1000px 100%;
+}

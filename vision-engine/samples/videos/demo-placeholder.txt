@@ -1,0 +1,47 @@
+DEMO VIDEO PLACEHOLDER
+======================
+
+To use the vision engine demo mode, place a traffic video file at:
+  demo.mp4
+
+Video Requirements:
+- Format: MP4, AVI, MOV, or other OpenCV-supported format
+- Content: Traffic scene with vehicles (cars, buses, trucks, motorcycles)
+- Duration: 30 seconds to 5 minutes recommended for testing
+- Resolution: 1280x720 or higher recommended
+- Frame Rate: 24-30 fps
+
+Suggested Sources for Demo Videos:
+1. YouTube: Search "traffic video Dakar" or "traffic surveillance footage"
+   - Download with yt-dlp: yt-dlp -f best "https://youtube.com/watch?v=..."
+
+2. Unsplash/Pixabay: Free traffic and street videos
+   - https://pixabay.com/videos/search/traffic/
+   - https://www.pexels.com/search/videos/traffic/
+
+3. OpenTraffic Project: Real traffic data
+   - https://www.microsoft.com/en-us/maps/traffic-camera-explorer
+
+4. Cityscapes Dataset: Academic dataset with traffic footage
+   - https://www.cityscapes-dataset.com/
+
+5. KITTI Dataset: Autonomous driving dataset with traffic
+   - http://www.cvlibs.net/datasets/kitti/
+
+How to Prepare:
+1. Download a traffic video
+2. Rename to "demo.mp4"
+3. Place in this directory
+4. Run: python -m app.main
+
+The vision engine will:
+- Load the video
+- Detect and track vehicles
+- Count crossings over the counting line
+- Monitor zone occupancy
+- Display results in real-time (if DISPLAY_OUTPUT=true)
+- Publish metrics to the backend API
+
+Example minimal setup:
+  $ wget https://example.com/traffic-demo.mp4 -O demo.mp4
+  $ python -m app.main
