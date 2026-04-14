@@ -3,6 +3,7 @@ import clsx from 'clsx';
 interface CardProps {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   header?: React.ReactNode;
   footer?: React.ReactNode;
   padding?: 'sm' | 'md' | 'lg';
@@ -17,12 +18,13 @@ const paddingStyles = {
 export const Card = ({
   children,
   className,
+  style,
   header,
   footer,
   padding = 'md',
 }: CardProps) => {
   return (
-    <div className={clsx('card-base', className)}>
+    <div className={clsx('card-base', className)} style={style}>
       {header && (
         <div className={clsx('border-b border-gray-200', paddingStyles[padding])}>
           {header}

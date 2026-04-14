@@ -200,7 +200,7 @@ print_summary() {
     echo -e "${GREEN}Vision engine demo has completed!${NC}"
     echo -e ""
     echo -e "Next steps:"
-    echo -e "  1. Check the dashboard at ${YELLOW}http://localhost:3000${NC}"
+    echo -e "  1. Check the dashboard at ${YELLOW}http://localhost:3001${NC}"
     echo -e "  2. View analytics at ${YELLOW}http://localhost:8000/api/analytics/traffic${NC}"
     echo -e "  3. Check API docs at ${YELLOW}http://localhost:8000/docs${NC}"
     echo -e ""

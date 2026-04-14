@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Alert } from '@/lib/types';
 import { timeAgo } from '@/lib/format';
+import { ALERT_TYPE_LABELS, ALERT_SEVERITY_LABELS } from '@/lib/constants';
 
 interface AlertsTableProps {
   alerts: Alert[];
@@ -24,7 +25,7 @@ export const AlertsTable = ({ alerts, onResolve, resolvingId }: AlertsTableProps
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                Severity
+                Severite
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Type
@@ -39,7 +40,7 @@ export const AlertsTable = ({ alerts, onResolve, resolvingId }: AlertsTableProps
                 Site
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                Time
+                Quand
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Action
@@ -51,36 +52,38 @@ export const AlertsTable = ({ alerts, onResolve, resolvingId }: AlertsTableProps
               <tr
                 key={alert.id}
                 className={`hover:bg-gray-50 transition-colors ${
-                  alert.isResolved ? 'bg-gray-50 opacity-60' : ''
+                  alert.is_resolved ? 'bg-gray-50 opacity-60' : ''
                 }`}
               >
                 <td className="px-6 py-4">
                   <Badge variant={severityVariants[alert.severity]}>
-                    {alert.severity.charAt(0).toUpperCase() + alert.severity.slice(1)}
+                    {ALERT_SEVERITY_LABELS[alert.severity] || alert.severity}
                   </Badge>
                 </td>
                 <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                  {alert.alertType}
+                  {ALERT_TYPE_LABELS[alert.alert_type] || alert.alert_type}
                 </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{alert.message}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{alert.cameraName}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{alert.siteName}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  {timeAgo(alert.createdAt)}
+                  {alert.short_description || alert.message}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-600">{alert.camera_name || '—'}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{alert.site_name || '—'}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">
+                  {timeAgo(alert.created_at)}
                 </td>
                 <td className="px-6 py-4">
-                  {!alert.isResolved && onResolve && (
+                  {!alert.is_resolved && onResolve && (
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => onResolve(alert.id)}
                       loading={resolvingId === alert.id}
                     >
-                      Resolve
+                      Resoudre
                     </Button>
                   )}
-                  {alert.isResolved && (
-                    <span className="text-xs text-gray-500 font-medium">Resolved</span>
+                  {alert.is_resolved && (
+                    <span className="text-xs text-gray-500 font-medium">Resolue</span>
                   )}
                 </td>
               </tr>

@@ -101,7 +101,10 @@ class ZoneCounter:
         # Draw zone polygon
         points_array = np.array(self.pixel_polygon, dtype=np.int32)
         cv2.polylines(frame, [points_array], True, (0, 255, 0), 2)
-        cv2.fillPoly(frame, [points_array], (0, 255, 0), alpha=0.1)
+        # OpenCV fillPoly has no alpha parameter; blend via overlay.
+        overlay = frame.copy()
+        cv2.fillPoly(overlay, [points_array], (0, 255, 0))
+        cv2.addWeighted(overlay, 0.10, frame, 0.90, 0, frame)
 
         # Draw object count in zone
         count = self.get_count()

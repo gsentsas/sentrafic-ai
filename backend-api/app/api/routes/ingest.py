@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db
+from app.api.deps import get_db, require_api_key
 from app.schemas.ingest import IngestBatch, IngestResponse
 from app.services.ingest_service import process_ingest_batch
 
@@ -12,13 +12,12 @@ router = APIRouter()
 def ingest_events(
     batch: IngestBatch,
     db: Session = Depends(get_db),
+    _api_key: str = Depends(require_api_key),
 ):
     """
     Receive detection events batch from vision engine.
 
-    This endpoint accepts batches of traffic detection events from the vision
-    processing engine. Events are processed to create traffic aggregates,
-    check for congestion conditions, and generate alerts.
+    Requires X-API-Key header matching VISION_API_KEY config.
 
     Expected payload:
     ```json
@@ -41,12 +40,6 @@ def ingest_events(
       ]
     }
     ```
-
-    Returns:
-    - received_count: Number of events received
-    - processed_count: Number of events successfully processed
-    - status: "success" or "partial"
-    - errors: List of any processing errors
     """
     result = process_ingest_batch(db, batch.events)
     return IngestResponse(

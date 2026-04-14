@@ -18,14 +18,14 @@ SEN TRAFIC AI is designed to provide intelligent traffic monitoring and analysis
 
 ## System Architecture
 
-SEN TRAFIC AI is organized as a monorepo with four main services:
+SEN TRAFIC AI is organized as a monorepo with four main parts:
 
 ### Services
 
 1. **backend-api** - FastAPI application providing REST endpoints, database management, and real-time event aggregation
 2. **vision-engine** - Python service running YOLO detection and tracking, processes video streams and publishes metrics
 3. **dashboard** - Next.js React application providing the user interface for traffic analysis and monitoring
-4. **infra** - Docker composition and infrastructure as code
+4. **infra (logical)** - infrastructure concerns handled by root `docker-compose.yml` and deployment docs
 
 ### Architecture Diagram
 
@@ -100,7 +100,7 @@ docker-compose logs -f backend-api
 ```
 
 Services will be available at:
-- Dashboard: http://localhost:3000
+- Dashboard: http://localhost:3001
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
 - Postgres: localhost:5432
@@ -146,7 +146,7 @@ pip install -r requirements.txt
 python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')"
 
 # Start vision engine
-python main.py
+python -m app.main
 ```
 
 #### Dashboard
@@ -188,16 +188,14 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 # Vision Engine
 YOLO_MODEL=yolov8n.pt
-VISION_CAMERA_ID=1
 VISION_SOURCE=samples/videos/demo.mp4
+VISION_DEMO_MODE=true
 ```
 
 ## API Endpoints Summary
 
 ### Authentication
 - `POST /api/auth/login` - User login
-- `POST /api/auth/logout` - User logout
-- `POST /api/auth/refresh` - Refresh JWT token
 
 ### System
 - `GET /api/health` - Health check
@@ -217,10 +215,10 @@ VISION_SOURCE=samples/videos/demo.mp4
 
 ### Analytics
 - `GET /api/analytics/traffic` - Traffic analytics
-- `POST /api/analytics/export` - Export traffic data
+- `GET /api/exports/traffic.csv` - Export traffic data (CSV)
 
 ### Vision Integration
-- `POST /api/ingest/events` - Ingest vision engine events (internal)
+- `POST /api/ingest/events` - Ingest vision engine event batches (internal, requires `X-API-Key`)
 
 See [docs/api.md](docs/api.md) for complete reference.
 
@@ -382,8 +380,8 @@ See [docs/deployment.md](docs/deployment.md) for production deployment guide inc
 
 - **Application Logs**: Check with `docker-compose logs <service>`
 - **Health Endpoints**: `GET /api/health` for backend
-- **Camera Health**: `GET /api/cameras/{id}/health`
-- **Metrics**: Available at `GET /api/analytics/metrics`
+- **Camera Monitoring**: `GET /api/cameras/{id}/traffic`
+- **Analytics**: `GET /api/analytics/traffic` and `GET /api/analytics/distribution`
 
 ## Troubleshooting
 

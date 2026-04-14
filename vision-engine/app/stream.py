@@ -4,7 +4,7 @@ Video stream handling for local files and RTSP cameras.
 
 import cv2
 import time
-from typing import Tuple, Optional
+from typing import Any, Tuple, Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ class VideoStream:
             self.cap = None
             return False
 
-    def read(self) -> Tuple[bool, Optional]:
+    def read(self) -> Tuple[bool, Optional[Any]]:
         """
         Read next frame.
         Returns:

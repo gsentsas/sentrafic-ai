@@ -16,10 +16,10 @@ export const SitesTable = ({ sites }: SitesTableProps) => {
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                Name
+                Nom
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                City
+                Ville
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                 Type
@@ -28,10 +28,10 @@ export const SitesTable = ({ sites }: SitesTableProps) => {
                 Cameras
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                Status
+                Statut
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                Created
+                Cree le
               </th>
             </tr>
           </thead>
@@ -47,15 +47,15 @@ export const SitesTable = ({ sites }: SitesTableProps) => {
                   </Link>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">{site.city}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{site.siteType}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{site.cameraCount}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{site.site_type}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{site.camera_count}</td>
                 <td className="px-6 py-4">
-                  <Badge variant={site.isActive ? 'success' : 'default'}>
-                    {site.isActive ? 'Active' : 'Inactive'}
+                  <Badge variant={site.is_active ? 'success' : 'default'}>
+                    {site.is_active ? 'Actif' : 'Inactif'}
                   </Badge>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600">
-                  {formatDate(site.createdAt)}
+                  {formatDate(site.created_at)}
                 </td>
               </tr>
             ))}

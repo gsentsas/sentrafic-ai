@@ -25,6 +25,15 @@ class Settings(BaseSettings):
     ADMIN_EMAIL: str = "admin@sentrafic.sn"
     ADMIN_PASSWORD: str = "admin123"
 
+    # Vision engine API key (used for X-API-Key header auth on ingest routes)
+    VISION_API_KEY: str = "vision-engine-secret-key"
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,http://localhost:8000"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Return normalized CORS origins from comma-separated env value."""
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+
     class Config:
         """Pydantic configuration."""
         env_file = ".env"

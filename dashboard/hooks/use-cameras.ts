@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Camera, PaginatedResponse } from '@/lib/types';
+import { Camera } from '@/lib/types';
 import { getCameras } from '@/lib/api';
 
 interface UseCamerasResult {
@@ -18,7 +18,6 @@ export const useCameras = (
   limit: number = 100
 ): UseCamerasResult => {
   const [cameras, setCameras] = useState<Camera[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,11 +25,10 @@ export const useCameras = (
     try {
       setLoading(true);
       setError(null);
-      const result: PaginatedResponse<Camera> = await getCameras(siteId, skip, limit);
-      setCameras(result.items);
-      setTotal(result.total);
+      const result: Camera[] = await getCameras(siteId, skip, limit);
+      setCameras(result);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch cameras'));
+      setError(err instanceof Error ? err : new Error('Echec du chargement des cameras'));
       setCameras([]);
     } finally {
       setLoading(false);
@@ -46,6 +44,6 @@ export const useCameras = (
     loading,
     error,
     refetch: fetchData,
-    total,
+    total: cameras.length,
   };
 };

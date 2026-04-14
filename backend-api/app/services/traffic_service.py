@@ -71,9 +71,11 @@ def get_traffic_summary(
     total_vehicles = total_cars + total_buses + total_trucks + total_motorcycles
 
     congestion_levels = [a.congestion_level.value for a in aggregates]
-    avg_congestion = (
-        congestion_levels[0] if congestion_levels else "free"
-    )
+    if congestion_levels:
+        from collections import Counter
+        avg_congestion = Counter(congestion_levels).most_common(1)[0][0]
+    else:
+        avg_congestion = "free"
 
     return {
         "total_vehicles": total_vehicles,

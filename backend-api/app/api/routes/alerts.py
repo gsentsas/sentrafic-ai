@@ -62,11 +62,6 @@ def resolve_alert_endpoint(
     - **alert_id**: Alert ID to resolve
     - **resolved_by**: User ID who is resolving (optional)
     """
-    alert = resolve_alert(db, alert_id, resolved_by=alert_resolve.resolved_by)
-    return {
-        "id": alert.id,
-        "is_resolved": alert.is_resolved,
-        "resolved_at": alert.resolved_at,
-        "resolved_by": alert.resolved_by,
-        "message": "Alert resolved successfully",
-    }
+    # resolve_alert returns a serialized dict
+    resolved = resolve_alert(db, alert_id, resolved_by=alert_resolve.resolved_by)
+    return {**resolved, "message": "Alerte résolue avec succès"}

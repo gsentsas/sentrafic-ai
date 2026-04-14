@@ -36,7 +36,7 @@ export default function AlertsPage() {
 
   if (loading) {
     return (
-      <PageShell title="Alerts">
+      <PageShell title="Alertes">
         <LoadingState />
       </PageShell>
     );
@@ -44,7 +44,7 @@ export default function AlertsPage() {
 
   if (error) {
     return (
-      <PageShell title="Alerts">
+      <PageShell title="Alertes">
         <ErrorState
           message={error.message}
           onRetry={refetch}
@@ -54,33 +54,33 @@ export default function AlertsPage() {
   }
 
   return (
-    <PageShell title="Alerts">
+    <PageShell title="Alertes">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-900">
-          {total} {total === 1 ? 'Alert' : 'Alerts'}
+          {total} {total === 1 ? 'Alerte' : 'Alertes'}
         </h2>
-        <p className="text-gray-600">Monitor and manage traffic alerts</p>
+        <p className="text-gray-600">Surveillance et gestion des alertes trafic</p>
       </div>
 
-      {/* Filters */}
+      {/* Filtres */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-md">
         <Select
-          label="Severity"
+          label="Severite"
           options={[
-            { value: '', label: 'All Severities' },
+            { value: '', label: 'Toutes' },
             { value: 'info', label: 'Info' },
-            { value: 'warning', label: 'Warning' },
-            { value: 'critical', label: 'Critical' },
+            { value: 'warning', label: 'Avertissement' },
+            { value: 'critical', label: 'Critique' },
           ]}
           value={severityFilter}
           onChange={(e) => setSeverityFilter(e.target.value)}
         />
         <Select
-          label="Status"
+          label="Statut"
           options={[
-            { value: 'false', label: 'Unresolved' },
-            { value: 'true', label: 'Resolved' },
-            { value: '', label: 'All' },
+            { value: 'false', label: 'Non resolues' },
+            { value: 'true', label: 'Resolues' },
+            { value: '', label: 'Toutes' },
           ]}
           value={resolvedFilter}
           onChange={(e) => setResolvedFilter(e.target.value)}
@@ -97,8 +97,8 @@ export default function AlertsPage() {
         <Card>
           <EmptyState
             icon={AlertCircle}
-            title="No alerts"
-            description="Your system is running smoothly with no active alerts"
+            title="Aucune alerte"
+            description="Le systeme fonctionne normalement, aucune alerte active"
           />
         </Card>
       )}

@@ -2,7 +2,7 @@ import pytest
 from app.models.site import Site, SiteType
 
 
-def test_list_sites(client, db):
+def test_list_sites(admin_client, db):
     """Test listing sites."""
     # Create test site
     site = Site(
@@ -18,15 +18,15 @@ def test_list_sites(client, db):
     db.commit()
 
     # Test list endpoint
-    response = client.get("/api/sites/")
+    response = admin_client.get("/api/sites/")
     assert response.status_code == 200
     assert len(response.json()) > 0
     assert response.json()[0]["name"] == "Test Site"
 
 
-def test_create_site(client, db):
+def test_create_site(admin_client, db):
     """Test creating a site."""
-    response = client.post(
+    response = admin_client.post(
         "/api/sites/",
         json={
             "name": "New Site",
@@ -45,7 +45,7 @@ def test_create_site(client, db):
     assert data["camera_count"] == 0
 
 
-def test_get_site(client, db):
+def test_get_site(admin_client, db):
     """Test getting a specific site."""
     # Create test site
     site = Site(
@@ -61,14 +61,14 @@ def test_get_site(client, db):
     db.commit()
 
     # Test get endpoint
-    response = client.get(f"/api/sites/{site.id}")
+    response = admin_client.get(f"/api/sites/{site.id}")
     assert response.status_code == 200
     data = response.json()
     assert data["name"] == "Get Test Site"
     assert data["city"] == "Dakar"
 
 
-def test_update_site(client, db):
+def test_update_site(admin_client, db):
     """Test updating a site."""
     # Create test site
     site = Site(
@@ -84,7 +84,7 @@ def test_update_site(client, db):
     db.commit()
 
     # Test update endpoint
-    response = client.put(
+    response = admin_client.put(
         f"/api/sites/{site.id}",
         json={
             "name": "Updated Site Name",
@@ -97,9 +97,9 @@ def test_update_site(client, db):
     assert data["city"] == "Saint-Louis"
 
 
-def test_get_nonexistent_site(client):
+def test_get_nonexistent_site(admin_client):
     """Test getting a non-existent site."""
     import uuid
-    response = client.get(f"/api/sites/{uuid.uuid4()}")
+    response = admin_client.get(f"/api/sites/{uuid.uuid4()}")
     assert response.status_code == 404
     assert "not found" in response.json()["detail"].lower()

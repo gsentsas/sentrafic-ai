@@ -332,21 +332,25 @@ Content-Type: application/json
 X-API-Key: <vision-api-key>
 ```
 
-**Payload**:
+**Payload (current implementation)**:
 ```json
 {
-  "camera_id": "550e8400-e29b-41d4-a716-446655440002",
-  "timestamp": "2026-04-11T10:30:45Z",
-  "metrics": {
-    "vehicle_count": 42,
-    "line_crossings": 15,
-    "zone_occupancy": 0.45,
-    "classifications": {
-      "car": 28,
-      "truck": 10,
-      "motorcycle": 4
+  "events": [
+    {
+      "camera_id": "550e8400-e29b-41d4-a716-446655440002",
+      "timestamp": "2026-04-11T10:30:45Z",
+      "period_seconds": 300,
+      "counts": {
+        "car": 28,
+        "bus": 3,
+        "truck": 10,
+        "motorcycle": 4,
+        "person": 12
+      },
+      "avg_occupancy": 0.45,
+      "congestion_level": "moderate"
     }
-  }
+  ]
 }
 ```
 
@@ -366,7 +370,7 @@ YOLO_CONFIDENCE=0.5            # Detection confidence
 YOLO_IOU=0.45                  # NMS threshold
 
 # Camera Configuration
-VISION_CAMERA_ID=1             # Unique camera identifier
+# In production, camera_id values are UUIDs from backend /api/cameras/
 VISION_CAMERA_NAME=Demo Camera # Display name
 VISION_SOURCE=rtsp://...       # Video source
 VISION_FPS=30                  # Target frames per second
@@ -537,14 +541,24 @@ VISION_BATCH_SIZE=4  # Process 4 frames per inference
 ```bash
 # Run vision engine locally
 cd vision-engine
-python main.py
+python -m app.main
 
 # Process demo video
-VISION_SOURCE=samples/videos/demo.mp4 python main.py
+VISION_SOURCE=samples/videos/demo.mp4 python -m app.main
 
 # Log detection results
-VISION_DEBUG=true python main.py
+VISION_DEBUG=true python -m app.main
 ```
+
+### Demo mode and auth note
+
+- Demo mode (`VISION_DEMO_MODE=true`) publishes events with `X-API-Key` to `/api/ingest/events`.
+- Since backend business routes are JWT-protected, automatic demo seeding through unauthenticated
+  `POST /api/sites` and `POST /api/cameras` may be rejected (`401`).
+- Recommended flow:
+  1. Start stack with `docker compose up -d`
+  2. Seed backend data with `./scripts/seed-demo.sh`
+  3. Start/restart vision demo pipeline
 
 ### Unit Tests
 

@@ -14,7 +14,8 @@ import { DistributionPieChart } from '@/components/charts/distribution-pie-chart
 import { useAnalytics } from '@/hooks/use-analytics';
 import { useCameras } from '@/hooks/use-cameras';
 import { VEHICLE_CLASSES } from '@/lib/constants';
-import { Download } from 'lucide-react';
+import { exportTrafficCsv, downloadBlob } from '@/lib/api';
+import { Download, Loader2 } from 'lucide-react';
 
 type Granularity = 'hour' | 'day';
 
@@ -26,6 +27,8 @@ export default function AnalyticsPage() {
   const [endDate, setEndDate] = useState(today);
   const [granularity, setGranularity] = useState<Granularity>('hour');
   const [selectedCamera, setSelectedCamera] = useState('');
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState('');
 
   const { cameras } = useCameras();
   const { data, distribution, loading, error, refetch } = useAnalytics(
@@ -38,20 +41,47 @@ export default function AnalyticsPage() {
   const chartData = useMemo(() => {
     return data.map((point) => ({
       timestamp: point.timestamp.split('T')[1]?.substring(0, 5) || point.timestamp,
-      count: point.totalCount,
+      count: point.total_count,
     }));
   }, [data]);
 
-  const cameraOptions = cameras.map((cam) => ({
-    value: cam.id,
-    label: cam.name,
-  }));
+  const barChartData = useMemo(() => {
+    return data.map((point) => ({
+      name: point.timestamp.split('T')[1]?.substring(0, 5) || point.timestamp,
+      car: point.car_count,
+      bus: point.bus_count,
+      truck: point.truck_count,
+      motorcycle: point.motorcycle_count,
+      person: point.person_count,
+    }));
+  }, [data]);
+
+  const cameraOptions = cameras.map((cam) => ({ value: cam.id, label: cam.name }));
+
+  const handleExport = async () => {
+    setExporting(true);
+    setExportError('');
+    try {
+      const blob = await exportTrafficCsv(
+        startDate,
+        endDate,
+        selectedCamera || undefined
+      );
+      const cam = cameras.find((c) => c.id === selectedCamera);
+      const filename = `trafic_${startDate}_${endDate}${cam ? `_${cam.name.replace(/\s+/g, '_')}` : ''}.csv`;
+      downloadBlob(blob, filename);
+    } catch (e: any) {
+      setExportError(e.message || "Échec de l'export. Veuillez réessayer.");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   if (error && !loading) {
     return (
-      <PageShell title="Analytics">
+      <PageShell title="Analytique">
         <ErrorState
-          message={error.message}
+          message="Impossible de charger les données analytiques. Vérifiez les filtres et réessayez."
           onRetry={refetch}
         />
       </PageShell>
@@ -59,85 +89,104 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <PageShell title="Analytics">
+    <PageShell title="Analytique">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-900">
-          Traffic Analysis & Reports
+          Analyse du trafic et rapports
         </h2>
-        <p className="text-gray-600">View detailed traffic patterns and vehicle classification</p>
+        <p className="text-gray-500">
+          Visualisez les tendances de trafic et la classification des véhicules
+        </p>
       </div>
 
-      {/* Filters */}
+      {/* Filtres */}
       <Card className="mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <Input
-            label="Start Date"
+            label="Date de début"
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
           <Input
-            label="End Date"
+            label="Date de fin"
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
           <Select
-            label="Granularity"
+            label="Granularité"
             options={[
-              { value: 'hour', label: 'Hourly' },
-              { value: 'day', label: 'Daily' },
+              { value: 'hour', label: 'Par heure' },
+              { value: 'day', label: 'Par jour' },
             ]}
             value={granularity}
             onChange={(e) => setGranularity(e.target.value as Granularity)}
           />
           <Select
-            label="Camera"
-            options={[{ value: '', label: 'All Cameras' }, ...cameraOptions]}
+            label="Caméra"
+            options={[{ value: '', label: 'Toutes les caméras' }, ...cameraOptions]}
             value={selectedCamera}
             onChange={(e) => setSelectedCamera(e.target.value)}
           />
-          <div className="flex items-end">
-            <Button variant="secondary" className="w-full">
-              <Download className="w-4 h-4 mr-2" />
-              Export CSV
+          <div className="flex flex-col justify-end gap-1">
+            <Button
+              variant="secondary"
+              onClick={handleExport}
+              disabled={exporting}
+              className="w-full"
+            >
+              {exporting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Export...
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4 mr-2" />
+                  Exporter CSV
+                </>
+              )}
             </Button>
+            {exportError && (
+              <p className="text-xs text-red-600">{exportError}</p>
+            )}
           </div>
         </div>
       </Card>
 
-      {/* Charts */}
+      {/* Graphiques */}
       {loading ? (
-        <LoadingState />
+        <LoadingState message="Chargement des données analytiques..." />
+      ) : data.length === 0 ? (
+        <Card>
+          <div className="text-center py-12 text-gray-500">
+            <p className="text-lg font-medium mb-1">Aucune donnée sur cette période</p>
+            <p className="text-sm">Modifiez les dates ou la caméra sélectionnée.</p>
+          </div>
+        </Card>
       ) : (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <div className="lg:col-span-2">
               <TrafficLineChart
                 data={chartData}
-                title="Traffic Volume Over Time"
+                title="Volume de trafic dans le temps"
               />
             </div>
 
             {distribution.length > 0 && (
               <DistributionPieChart
                 data={distribution}
-                title="Vehicle Class Distribution"
+                title="Répartition par classe"
               />
             )}
           </div>
 
-          {chartData.length > 0 && (
+          {barChartData.length > 0 && (
             <TrafficBarChart
-              data={chartData.map((d, idx) => ({
-                name: d.timestamp,
-                car: Math.floor(Math.random() * 50),
-                bus: Math.floor(Math.random() * 20),
-                truck: Math.floor(Math.random() * 15),
-                motorcycle: Math.floor(Math.random() * 10),
-                person: Math.floor(Math.random() * 5),
-              }))}
-              title="Vehicle Count by Type"
+              data={barChartData}
+              title="Comptage par type de véhicule"
               dataKeys={VEHICLE_CLASSES}
             />
           )}

@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime, date, timezone
+from typing import Optional
 
 from app.api.deps import get_db
 from app.services.traffic_service import (
@@ -14,13 +15,21 @@ from app.services.traffic_service import (
 router = APIRouter()
 
 
+def _to_datetime(d: Optional[date]) -> Optional[datetime]:
+    """Convert a date to a timezone-aware datetime (start of day UTC)."""
+    if d is None:
+        return None
+    return datetime(d.year, d.month, d.day, tzinfo=timezone.utc)
+
+
 @router.get("/traffic")
 def get_traffic_data(
     db: Session = Depends(get_db),
     camera_id: UUID = Query(None),
     site_id: UUID = Query(None),
-    start_date: datetime = Query(None),
-    end_date: datetime = Query(None),
+    start_date: Optional[date] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[date] = Query(None, description="End date YYYY-MM-DD"),
+    granularity: str = Query("hour", description="Aggregation granularity (ignored — kept for frontend compat)"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
 ):
@@ -38,8 +47,8 @@ def get_traffic_data(
         db,
         camera_id=camera_id,
         site_id=site_id,
-        start_date=start_date,
-        end_date=end_date,
+        start_date=_to_datetime(start_date),
+        end_date=_to_datetime(end_date),
         skip=skip,
         limit=limit,
     )

@@ -48,7 +48,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 ### Production Build
 
@@ -79,7 +79,7 @@ dashboard/
 The dashboard connects to a FastAPI backend at the URL specified by `NEXT_PUBLIC_API_URL`.
 
 Key endpoints:
-- `POST /auth/login` - User authentication
+- `POST /api/auth/login` - User authentication
 - `GET /api/dashboard/overview` - Dashboard metrics
 - `GET /api/sites` - List of monitoring sites
 - `GET /api/cameras` - List of cameras

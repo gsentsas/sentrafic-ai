@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
@@ -7,11 +8,16 @@ import { LogOut, Activity } from 'lucide-react';
 import { NAV_ITEMS, APP_NAME } from '@/lib/constants';
 import { getUserFromToken, logout } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
+import { User } from '@/lib/types';
 
 export const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const user = getUserFromToken();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    setUser(getUserFromToken());
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -62,8 +68,8 @@ export const Sidebar = () => {
       <div className="px-4 py-4 border-b border-white/10">
         {user && (
           <div className="mb-4">
-            <p className="text-sm text-gray-400">Logged in as</p>
-            <p className="font-medium text-white truncate">{user.fullName}</p>
+            <p className="text-sm text-gray-400">Connecte en tant que</p>
+            <p className="font-medium text-white truncate">{user.full_name}</p>
             <p className="text-xs text-gray-400 truncate">{user.email}</p>
           </div>
         )}
@@ -74,7 +80,7 @@ export const Sidebar = () => {
           className="w-full justify-start text-gray-300 hover:text-white"
         >
           <LogOut className="w-4 h-4 mr-2" />
-          Logout
+          Deconnexion
         </Button>
       </div>
     </aside>

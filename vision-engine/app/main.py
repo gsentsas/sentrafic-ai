@@ -299,9 +299,17 @@ class Pipeline:
 
 
 def main():
-    """Entry point."""
-    pipeline = Pipeline()
-    pipeline.run()
+    """Entry point — switches to demo mode if VISION_DEMO_MODE=true."""
+    import os
+    demo_mode = os.environ.get("VISION_DEMO_MODE", "false").lower() in ("1", "true", "yes")
+
+    if demo_mode:
+        from app.demo import DemoPipeline
+        print("[vision-engine] Starting in DEMO mode (no camera/YOLO required)")
+        DemoPipeline().run()
+    else:
+        pipeline = Pipeline()
+        pipeline.run()
 
 
 if __name__ == "__main__":

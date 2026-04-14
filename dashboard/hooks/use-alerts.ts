@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Alert, PaginatedResponse } from '@/lib/types';
+import { Alert } from '@/lib/types';
 import { getAlerts, resolveAlert as apiResolveAlert } from '@/lib/api';
 
 interface UseAlertsResult {
@@ -20,7 +20,6 @@ export const useAlerts = (
   isResolved?: boolean
 ): UseAlertsResult => {
   const [alerts, setAlerts] = useState<Alert[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -28,11 +27,10 @@ export const useAlerts = (
     try {
       setLoading(true);
       setError(null);
-      const result: PaginatedResponse<Alert> = await getAlerts(skip, limit, severity, isResolved);
-      setAlerts(result.items);
-      setTotal(result.total);
+      const result: Alert[] = await getAlerts(skip, limit, severity, isResolved);
+      setAlerts(result);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch alerts'));
+      setError(err instanceof Error ? err : new Error('Echec du chargement des alertes'));
       setAlerts([]);
     } finally {
       setLoading(false);
@@ -49,7 +47,7 @@ export const useAlerts = (
         await apiResolveAlert(alertId);
         await fetchData();
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to resolve alert'));
+        setError(err instanceof Error ? err : new Error('Echec de la resolution'));
       }
     },
     [fetchData]
@@ -61,6 +59,6 @@ export const useAlerts = (
     error,
     refetch: fetchData,
     resolveAlert: handleResolveAlert,
-    total,
+    total: alerts.length,
   };
 };

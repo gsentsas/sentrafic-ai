@@ -25,10 +25,10 @@ def process_ingest_event(db: Session, event: IngestEvent) -> TrafficAggregate:
     if not camera:
         raise ValueError(f"Camera {event.camera_id} not found")
 
-    # Update camera status to online
-    if camera.status != CameraStatus.online:
-        camera.status = CameraStatus.online
-        db.add(camera)
+    # Update camera status and last_seen_at
+    camera.status = CameraStatus.online
+    camera.last_seen_at = datetime.now(timezone.utc)
+    db.add(camera)
 
     # Extract counts from the event
     counts = event.counts or {}

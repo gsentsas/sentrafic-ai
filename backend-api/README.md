@@ -165,6 +165,11 @@ pytest tests/test_health.py -v
 
 ## API Endpoints
 
+Auth requirements:
+- Public: `/api/auth/login`, `/api/auth/register`, `/api/health`, `/health`
+- API key (`X-API-Key`): `/api/ingest/events`
+- JWT required: sites, cameras, dashboard, analytics, alerts, exports, users
+
 ### Authentication
 - `POST /api/auth/login` - Authenticate user and get JWT token
 
@@ -302,7 +307,7 @@ Standard HTTP status codes are used:
 
 - JWT tokens expire after configured period (default: 480 minutes)
 - Passwords are hashed using bcrypt
-- CORS is enabled for MVP (configure for production)
+- CORS origins are configured via `CORS_ORIGINS` environment variable
 - All database queries use parameterized statements (SQLAlchemy)
 - Rate limiting should be added for production deployment
 

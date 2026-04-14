@@ -1,3 +1,5 @@
+'use client';
+
 import {
   BarChart,
   Bar,
@@ -18,7 +20,7 @@ interface BarData {
 interface TrafficBarChartProps {
   data: BarData[];
   title: string;
-  dataKeys: Array<{ key: string; color: string; name: string }>;
+  dataKeys: Array<{ key: string; color: string; label: string }>;
 }
 
 export const TrafficBarChart = ({
@@ -56,7 +58,7 @@ export const TrafficBarChart = ({
               dataKey={dataKey.key}
               stackId="a"
               fill={dataKey.color}
-              name={dataKey.name}
+              name={dataKey.label}
               radius={[4, 4, 0, 0]}
             />
           ))}

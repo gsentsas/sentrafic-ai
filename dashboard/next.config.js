@@ -1,13 +1,10 @@
-import type { NextConfig } from 'next';
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-  output: 'standalone',
   images: {
     unoptimized: true,
   },
-  headers: async () => {
+  async headers() {
     return [
       {
         source: '/:path*',
@@ -30,4 +27,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

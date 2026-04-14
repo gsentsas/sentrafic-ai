@@ -189,7 +189,7 @@ print_summary() {
     echo -e "${GREEN}All services are running!${NC}"
     echo -e ""
     echo -e "Service URLs:"
-    echo -e "  ${BLUE}Dashboard${NC}:        ${GREEN}http://localhost:3000${NC}"
+    echo -e "  ${BLUE}Dashboard${NC}:        ${GREEN}http://localhost:3001${NC}"
     echo -e "  ${BLUE}Backend API${NC}:       ${GREEN}http://localhost:8000${NC}"
     echo -e "  ${BLUE}API Docs${NC}:          ${GREEN}http://localhost:8000/docs${NC}"
     echo -e "  ${BLUE}PostgreSQL${NC}:        ${GREEN}localhost:5432${NC}"

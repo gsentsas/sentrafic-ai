@@ -1,3 +1,5 @@
+'use client';
+
 import { Sidebar } from './sidebar';
 import { Topbar } from './topbar';
 

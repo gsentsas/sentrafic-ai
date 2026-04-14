@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Site, PaginatedResponse } from '@/lib/types';
+import { Site } from '@/lib/types';
 import { getSites } from '@/lib/api';
 
 interface UseSitesResult {
@@ -10,13 +10,10 @@ interface UseSitesResult {
   error: Error | null;
   refetch: () => Promise<void>;
   total: number;
-  skip: number;
-  limit: number;
 }
 
 export const useSites = (skip: number = 0, limit: number = 100): UseSitesResult => {
   const [sites, setSites] = useState<Site[]>([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -24,11 +21,10 @@ export const useSites = (skip: number = 0, limit: number = 100): UseSitesResult 
     try {
       setLoading(true);
       setError(null);
-      const result: PaginatedResponse<Site> = await getSites(skip, limit);
-      setSites(result.items);
-      setTotal(result.total);
+      const result: Site[] = await getSites(skip, limit);
+      setSites(result);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch sites'));
+      setError(err instanceof Error ? err : new Error('Echec du chargement des sites'));
       setSites([]);
     } finally {
       setLoading(false);
@@ -44,8 +40,6 @@ export const useSites = (skip: number = 0, limit: number = 100): UseSitesResult 
     loading,
     error,
     refetch: fetchData,
-    total,
-    skip,
-    limit,
+    total: sites.length,
   };
 };

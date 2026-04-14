@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { timeAgo } from '@/lib/format';
 import { Alert } from '@/lib/types';
-import { ALERT_SEVERITY_COLORS } from '@/lib/constants';
+import { ALERT_SEVERITY_COLORS, ALERT_TYPE_LABELS, ALERT_SEVERITY_LABELS } from '@/lib/constants';
 
 interface AlertCardProps extends Alert {
   onResolve?: () => void;
@@ -18,14 +18,15 @@ const severityVariants = {
 } as const;
 
 export const AlertCard = ({
-  id,
   severity,
-  alertType,
+  alert_type,
   message,
-  cameraName,
-  siteName,
-  createdAt,
-  isResolved,
+  short_description,
+  recommended_action,
+  camera_name,
+  site_name,
+  created_at,
+  is_resolved,
   onResolve,
   isResolving = false,
 }: AlertCardProps) => {
@@ -46,18 +47,25 @@ export const AlertCard = ({
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <h4 className="font-semibold text-gray-900">{alertType}</h4>
-              <Badge variant={severityVariants[severity]}>{severity}</Badge>
+              <h4 className="font-semibold text-gray-900">
+                {ALERT_TYPE_LABELS[alert_type] || alert_type}
+              </h4>
+              <Badge variant={severityVariants[severity]}>
+                {ALERT_SEVERITY_LABELS[severity] || severity}
+              </Badge>
             </div>
-            <p className="text-sm text-gray-700 mb-2">{message}</p>
+            <p className="text-sm text-gray-700 mb-1">{short_description || message}</p>
+            {recommended_action && (
+              <p className="text-xs text-blue-600 mb-2">Action : {recommended_action}</p>
+            )}
             <div className="flex gap-4 text-xs text-gray-600">
-              <span>Camera: {cameraName}</span>
-              <span>Site: {siteName}</span>
-              <span>{timeAgo(createdAt)}</span>
+              {camera_name && <span>Camera : {camera_name}</span>}
+              {site_name && <span>Site : {site_name}</span>}
+              {created_at && <span>{timeAgo(created_at)}</span>}
             </div>
           </div>
         </div>
-        {!isResolved && onResolve && (
+        {!is_resolved && onResolve && (
           <Button
             variant="outline"
             size="sm"
@@ -65,7 +73,7 @@ export const AlertCard = ({
             loading={isResolving}
             className="ml-4"
           >
-            Resolve
+            Resoudre
           </Button>
         )}
       </div>

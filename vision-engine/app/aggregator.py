@@ -105,9 +105,15 @@ class TrafficAggregator:
             f"occupancy={avg_occupancy:.2%}, level={congestion_level}"
         )
 
-        # Reset for next window
-        self.reset()
-        self.window_start = end_timestamp
+        # Reset for next window — keep window_start as the logical
+        # start of the next period to avoid gaps/overlap
+        next_window_start = self.window_start + timedelta(
+            seconds=self.window_seconds
+        )
+        self.counts.clear()
+        self.occupancy_samples.clear()
+        self.frame_count = 0
+        self.window_start = next_window_start
 
         return result
 

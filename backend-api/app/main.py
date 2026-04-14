@@ -40,10 +40,10 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Add CORS middleware (allow all for MVP - restrict in production)
+# Add CORS middleware from environment configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins_list or ["http://localhost:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
