@@ -1,16 +1,17 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'SEN TRAFIC AI - Traffic Analysis Dashboard',
   description: 'Professional B2B dashboard for computer vision traffic analysis in Dakar, Senegal',
-  viewport: 'width=device-width, initial-scale=1',
   icons: {
     icon: '/favicon.ico',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="antialiased">
         {children}
       </body>
     </html>
