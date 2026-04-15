@@ -141,7 +141,12 @@ def dashboard_live_summary(
         reading_timestamp = last_agg.timestamp if last_agg else None
         is_stale = True
         if reading_timestamp:
-            is_stale = (now - reading_timestamp).total_seconds() >= 30
+            # SQLite retourne des datetimes naive — normaliser en UTC
+            ts = reading_timestamp
+            if ts.tzinfo is None:
+                from datetime import timezone as _tz
+                ts = ts.replace(tzinfo=_tz.utc)
+            is_stale = (now - ts).total_seconds() >= 30
         items.append(
             {
                 "camera_id": str(camera.id),
