@@ -85,7 +85,7 @@ export const getSites = async (skip = 0, limit = 100): Promise<Site[]> => {
 };
 
 export const getSiteById = async (siteId: string): Promise<Site> => {
-  return apiFetch<Site>(`/api/sites/${siteId}/`);
+  return apiFetch<Site>(`/api/sites/${siteId}`);
 };
 
 export const createSite = async (siteData: Partial<Site>): Promise<Site> => {
@@ -96,7 +96,7 @@ export const createSite = async (siteData: Partial<Site>): Promise<Site> => {
 };
 
 export const updateSite = async (siteId: string, siteData: Partial<Site>): Promise<Site> => {
-  return apiFetch<Site>(`/api/sites/${siteId}/`, {
+  return apiFetch<Site>(`/api/sites/${siteId}`, {
     method: 'PUT',
     body: JSON.stringify(siteData),
   });
@@ -116,7 +116,7 @@ export const getCameras = async (
 };
 
 export const getCameraById = async (cameraId: string): Promise<Camera> => {
-  return apiFetch<Camera>(`/api/cameras/${cameraId}/`);
+  return apiFetch<Camera>(`/api/cameras/${cameraId}`);
 };
 
 export const createCamera = async (cameraData: Partial<Camera>): Promise<Camera> => {
@@ -127,7 +127,7 @@ export const createCamera = async (cameraData: Partial<Camera>): Promise<Camera>
 };
 
 export const updateCamera = async (cameraId: string, cameraData: Partial<Camera>): Promise<Camera> => {
-  return apiFetch<Camera>(`/api/cameras/${cameraId}/`, {
+  return apiFetch<Camera>(`/api/cameras/${cameraId}`, {
     method: 'PUT',
     body: JSON.stringify(cameraData),
   });
@@ -137,7 +137,7 @@ export const getCameraTraffic = async (
   cameraId: string,
   hours = 24
 ): Promise<CameraTrafficData> => {
-  return apiFetch<CameraTrafficData>(`/api/cameras/${cameraId}/traffic/?hours=${hours}`);
+  return apiFetch<CameraTrafficData>(`/api/cameras/${cameraId}/traffic?hours=${hours}`);
 };
 
 // ──────────────────────────────────────────────
@@ -156,11 +156,11 @@ export const getAlerts = async (
 };
 
 export const getAlertById = async (alertId: string): Promise<Alert> => {
-  return apiFetch<Alert>(`/api/alerts/${alertId}/`);
+  return apiFetch<Alert>(`/api/alerts/${alertId}`);
 };
 
 export const resolveAlert = async (alertId: string): Promise<Alert> => {
-  return apiFetch<Alert>(`/api/alerts/${alertId}/resolve/`, {
+  return apiFetch<Alert>(`/api/alerts/${alertId}/resolve`, {
     method: 'POST',
     body: JSON.stringify({}),
   });
@@ -181,7 +181,7 @@ export const getTrafficAnalytics = async (
     granularity,
   });
   if (cameraId) query.append('camera_id', cameraId);
-  return apiFetch<TrafficAggregate[]>(`/api/analytics/traffic/?${query}`);
+  return apiFetch<TrafficAggregate[]>(`/api/analytics/traffic?${query}`);
 };
 
 export const getClassDistribution = async (
@@ -196,7 +196,7 @@ export const getClassDistribution = async (
   const query = new URLSearchParams({ period_hours: String(periodHours) });
   if (cameraId) query.append('camera_id', cameraId);
   // Backend returns a single object, wrap in array for consistency
-  const result = await apiFetch<ClassDistribution>(`/api/analytics/distribution/?${query}`);
+  const result = await apiFetch<ClassDistribution>(`/api/analytics/distribution?${query}`);
   return [result];
 };
 
@@ -253,7 +253,7 @@ export const loginApi = async (email: string, password: string) => {
 // Users
 // ──────────────────────────────────────────────
 export const getMe = async (): Promise<User> =>
-  apiFetch<User>('/api/users/me/');
+  apiFetch<User>('/api/users/me');
 
 export const getUsers = async (): Promise<User[]> =>
   apiFetch<User[]>('/api/users/');
@@ -262,10 +262,10 @@ export const createUser = async (data: UserCreate): Promise<User> =>
   apiFetch<User>('/api/users/', { method: 'POST', body: JSON.stringify(data) });
 
 export const updateUser = async (userId: string, data: UserUpdate): Promise<User> =>
-  apiFetch<User>(`/api/users/${userId}/`, { method: 'PUT', body: JSON.stringify(data) });
+  apiFetch<User>(`/api/users/${userId}`, { method: 'PUT', body: JSON.stringify(data) });
 
 export const changeMyPassword = async (data: UserPasswordChange): Promise<{ message: string }> =>
-  apiFetch<{ message: string }>('/api/users/me/password/', {
+  apiFetch<{ message: string }>('/api/users/me/password', {
     method: 'PUT',
     body: JSON.stringify(data),
   });
